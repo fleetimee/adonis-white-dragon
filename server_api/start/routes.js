@@ -1,4 +1,7 @@
-'use strict'
+"use strict";
+
+const { route } = require("@adonisjs/framework/src/Route/Manager");
+const UserController = require("../app/Controllers/Http/UserController");
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +17,32 @@
 */
 
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
-const Route = use('Route')
+const Route = use("Route");
 
-Route.on('/').render('welcome')
+Route.on("/").render("welcome");
+
+Route.get("/user", () => {
+  return {
+    user: [
+      {
+        name: "Badu",
+        usia: 23,
+      },
+      {
+        name: "Doni",
+        usia: 30,
+      },
+    ],
+  };
+});
+
+Route.group(() => {
+  Route.get("semua_user", "UserController.index");
+  Route.post("simpan", "UserController.simpan");
+  Route.delete("hapus", "UserController.hapus");
+  Route.put("ubah", "UserController.ubah");
+})
+  .prefix("/api")
+  .middleware("auth");
+
+Route.post("login", "UserController.login");
